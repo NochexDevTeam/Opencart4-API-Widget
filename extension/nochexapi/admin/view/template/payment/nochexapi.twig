@@ -1,0 +1,163 @@
+{{  header  }}{{  column_left  }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="float-end">
+        <button type="submit" form="form-nochex" data-toggle="tooltip" title="{{   button_save  }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{  cancel  }}" data-toggle="tooltip" title="{{  button_cancel  }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+	  <img src="https://www.nochex.com/logobase-secure-images/nochex_standard_logo_190x50.gif" alt="" />
+      <ol class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li class="breadcrumb-item"><a href="{{  breadcrumb.href  }}">{{  breadcrumb.text  }}</a></li>
+        {% endfor %} 
+      </ol>
+    </div>
+  </div>
+  
+  
+  <div class="container-fluid">
+    {% if errorNCX_warning %}
+    <div class="alert alert-danger"><i class="fa fa-exclamation-circle"></i> {{  errorNCX_warning  }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+   {% endif %}
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h3 class="panel-title"><i class="fa fa-pencil"></i> {{ textNCX_edit }}</h3>
+      </div>
+      <div class="panel-body">
+        <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-nochex" class="form-horizontal">
+		
+          <div class="tab-content">
+            <div class="tab-pane active" id="tab-settings">
+
+              <br>
+		
+          <div class="form-group required">
+		  <div class="row my-2">
+            <label class="col-sm-3 control-label" for="input-merchant">{{ entryNCX_merchant }}<span data-toggle="tooltip" title="{{ helpNCX_merchantid }}"></label>
+            <div class="col-sm-6">
+              <input type="text" name="payment_nochexapi_merchant" value="{{ payment_nochexapi_merchant }}" placeholder="{{ entryNCX_merchant }}" id="input-merchant" class="form-control" />
+              {% if errorNCX_merchant %}
+              <div class="text-danger">{{ errorNCX_merchant }}</div>
+              {% endif %}
+            </div>
+          </div>  
+		  </div>      
+		  
+          <div class="form-group required">
+		  <div class="row my-2">
+            <label class="col-sm-3 control-label" for="input-merchant">{{ entryNCX_merchantapi }}<span data-toggle="tooltip" title="{{ helpNCX_merchant_api }}"></label>
+            <div class="col-sm-6">
+              <input type="text" name="payment_nochexapi_merchantapi" value="{{ payment_nochexapi_merchantapi }}" placeholder="{{ entryNCX_merchantapi }}" id="input-merchantapi" class="form-control" />
+			  <div class="text-info mt-1">{{ errorNCX_merchantapi }}</div>
+              <!--{% if errorNCX_merchantapi %}
+              <div class="text-danger">{{ errorNCX_merchantapi }}</div>
+              {% endif %}-->
+            </div>
+          </div>  
+		  </div>     
+		  		  
+          <div class="form-group">
+		  <div class="row my-2">
+            <label class="col-sm-3 control-label">{{ entryNCX_test }}<span data-toggle="tooltip" title="{{ helpNCX_test }}"></label>
+            <div class="col-sm-6">			  
+                  <div class="form-check form-switch form-switch-lg">
+                    <input type="checkbox" name="payment_nochexapi_test" value="1" class="form-check-input"{% if payment_nochexapi_test %}checked{% endif %}/>
+                  </div>				  
+            </div>
+          </div> </div>
+		   
+		  <div class="form-group">
+		  <div class="row my-2">
+            <label class="col-sm-3 control-label">{{ entryNCX_debug }}<span data-toggle="tooltip" title="{{ helpNCX_debug }}"></label>
+            <div class="col-sm-6">  
+                  <div class="form-check form-switch form-switch-lg">
+                    <input type="checkbox" name="payment_nochexapi_debug" value="1" class="form-check-input"{% if payment_nochexapi_debug %}checked{% endif %}/>
+                  </div> 
+            </div>
+          </div> </div>
+		    
+          <div class="form-group">
+		  <div class="row my-2">
+            <label class="col-sm-3 control-label" for="input-total"><span data-toggle="tooltip" title="{{ helpNCX_total }}">{{ entryNCX_total }}</span></label>
+            <div class="col-sm-6">
+              <input type="text" name="payment_nochexapi_total" value="{{ payment_nochexapi_total }}" placeholder="{{ entryNCX_total }}" id="input-total" class="form-control" />
+            </div>
+          </div> </div>
+		  
+          <div class="form-group">
+		  <div class="row my-2">
+            <label class="col-sm-3 control-label" for="input-order-status">{{ entryNCX_order_status }}</label>
+            <div class="col-sm-6">
+              <select name="payment_nochexapi_order_status_id" id="input-order-status" class="form-control">			  
+                {% for order_status in order_statuses %}
+                {% if order_status.order_status_id == payment_nochexapi_order_status_id %}
+                <option value="{{ order_status.order_status_id }}" selected="selected">{{ order_status.name }}</option>
+                {% else %}
+                <option value="{{ order_status.order_status_id }}">{{ order_status.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div> </div>
+		  
+          <div class="form-group">
+		  <div class="row my-2">
+            <label class="col-sm-3 control-label" for="input-geo-zone">{{ entryNCX_geo_zone }}</label>
+            <div class="col-sm-6">
+              <select name="payment_nochexapi_geo_zone_id" id="input-geo-zone" class="form-control">
+                <option value="0">{{ textNCX_all_zones }}</option>               
+                {% for geo_zone in geo_zones %}
+                {% if geo_zone.geo_zone_id == payment_nochexapi_geo_zone_id %}
+                <option value="{{ geo_zone.geo_zone_id }}" selected="selected">{{ geo_zone.name }}</option>
+                {% else %}
+                <option value="{{ geo_zone.geo_zone_id }}">{{ geo_zone.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+          </div> </div>
+         
+			
+			
+			<div class="form-group">
+		  <div class="row my-2">
+				<label class="col-sm-3 control-label" for="input-status">{{ entryNCX_status }}</label>   <div class="col-sm-6">
+             
+			<select name="payment_nochexapi_status" id="input-status" class="form-control">
+                {% if payment_nochexapi_status %}
+                <option value="1" selected="selected">{{ textNCX_enabled }}</option>
+                <option value="0">{{ textNCX_disabled }}</option>
+                {% else %}
+                <option value="1">{{ textNCX_enabled }}</option>
+                <option value="0" selected="selected">{{ textNCX_disabled }}</option>
+                {% endif %}
+            </select>
+          </div>
+          </div> </div>
+		  
+          <div class="form-group">
+		  <div class="row my-2">
+            <label class="col-sm-3 control-label" for="input-sort-order">{{ entryNCX_sort_order }}</label>
+            <div class="col-sm-6">
+              <input type="text" name="payment_nochexapi_sort_order" value="{{ payment_nochexapi_sort_order }}" placeholder="{{ entryNCX_sort_order }}" id="input-sort-order" class="form-control" />
+            </div>
+          </div> </div>
+		  
+		 <!--  <div class="container-fluid">
+		  <div class="row my-2">
+      <div class="pull-right">
+        <button type="submit" form="form-nochex" data-toggle="tooltip" title="{{   button_save  }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{  cancel  }}" data-toggle="tooltip" title="{{  button_cancel  }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+		 </div> </div>
+    </div>-->
+		
+		 </div>
+    </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{{  footer  }} 
