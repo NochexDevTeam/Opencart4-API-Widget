@@ -55,9 +55,18 @@ class Callback extends \Opencart\System\Engine\Controller {
 		curl_close($ch);
 
 		if($_POST["transaction_status"] == "100"){
-		$testStatus = "Test";
+			$testStatus = "Test";
+			
+			$this->model_checkout_order->addHistory($order_id, 16, "This transaction was a TEST, please check this was intended and test mode has not been accidentally enabled");				
+			$this->response->redirect($this->url->link('checkout/success', '', 'SSL'));
 		}else{
 		$testStatus = "Live";
+		}
+		
+		
+		if ($order_info['total'] != $_POST["gross_amount"]){				
+			$this->model_checkout_order->addHistory($order_id, 16, "Paid Amount does not match the order total, please check before sending out or supplying goods and services");		
+			$this->response->redirect($this->url->link('checkout/success', '', 'SSL'));
 		}
 		
 		if ($response=="AUTHORISED") {
@@ -105,7 +114,6 @@ class Callback extends \Opencart\System\Engine\Controller {
 		$output = curl_exec($ch); // Post back
 		curl_close($ch);
 
-		mail("james.lugton@nochex,com","APC", $output, "from:james.lugton@nochex,com");
 		
 		
 		if( strstr($output, 'AUTHORISED') !== false ) {
